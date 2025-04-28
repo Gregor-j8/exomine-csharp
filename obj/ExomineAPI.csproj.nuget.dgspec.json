@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\grego\\workspace\\csharp\\ExomineAPI\\ExomineAPI.csproj": {}
+    "C:\\Users\\draco\\workspace\\csharp\\exomine-csharp\\ExomineAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\grego\\workspace\\csharp\\ExomineAPI\\ExomineAPI.csproj": {
+    "C:\\Users\\draco\\workspace\\csharp\\exomine-csharp\\ExomineAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\grego\\workspace\\csharp\\ExomineAPI\\ExomineAPI.csproj",
+        "projectUniqueName": "C:\\Users\\draco\\workspace\\csharp\\exomine-csharp\\ExomineAPI.csproj",
         "projectName": "ExomineAPI",
-        "projectPath": "C:\\Users\\grego\\workspace\\csharp\\ExomineAPI\\ExomineAPI.csproj",
-        "packagesPath": "C:\\Users\\grego\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\grego\\workspace\\csharp\\ExomineAPI\\obj\\",
+        "projectPath": "C:\\Users\\draco\\workspace\\csharp\\exomine-csharp\\ExomineAPI.csproj",
+        "packagesPath": "C:\\Users\\draco\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\draco\\workspace\\csharp\\exomine-csharp\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\grego\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\draco\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -32,6 +32,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -66,7 +71,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
