@@ -362,7 +362,7 @@ app.MapGet("/api/colonyMinerals", () => {
     Quantity = cm.Quantity
   });
 });
-app.MapGet("/api/colonyMinerals{id}", (int id) => {
+app.MapGet("/api/colonyMinerals/{id}", (int id) => {
   List<ColonyMineral> cm = Colonyminerals.Where(cm => cm.ColonyId == id).ToList();
   return cm.Select(cm => new ColonyMineralDTO{
     Id = cm.Id,
