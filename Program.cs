@@ -296,7 +296,8 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policy =>
     {
         policy.WithOrigins(
-            "http://localhost:3000" 
+            "http://localhost:3000",
+            "http://localhost:5173"
         )
         .AllowAnyHeader()
         .AllowAnyMethod();
@@ -358,6 +359,21 @@ app.MapGet("/api/colonyMinerals", () => {
     Id = cm.Id,
     ColonyId = cm.ColonyId,
     MineralId = cm.Id,
+    Quantity = cm.Quantity
+  });
+});
+app.MapGet("/api/colonyMinerals{id}", (int id) => {
+  List<ColonyMineral> cm = Colonyminerals.Where(cm => cm.ColonyId == id).ToList();
+  return cm.Select(cm => new ColonyMineralDTO{
+    Id = cm.Id,
+    ColonyId = cm.ColonyId,
+    MineralId = cm.Id,
+     Minerals = new List<MineralDTO> {
+      minerals.Where(m => m.Id == cm.MineralId).Select(m => new MineralDTO {
+              Id = m.Id,
+              Name = m.Name
+          }).FirstOrDefault()
+        },
     Quantity = cm.Quantity
   });
 });
