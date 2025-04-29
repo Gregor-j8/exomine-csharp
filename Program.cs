@@ -344,7 +344,7 @@ app.MapGet("api/minerals", () => {
     });
 });
 
-app.MapGet("/api/miningfacilities", () => {
+app.MapGet("/api/facilities", () => {
     return miningFacilities.Select(f => new MiningFacilityDTO
     {
         Id = f.Id,
@@ -353,7 +353,16 @@ app.MapGet("/api/miningfacilities", () => {
     });
 });
 
-app.MapGet("/api/fm/", () => {
+app.MapGet("/api/colonyMinerals", () => {
+  return Colonyminerals.Select(cm => new ColonyMineralDTO{
+    Id = cm.Id,
+    ColonyId = cm.ColonyId,
+    MineralId = cm.Id,
+    Quantity = cm.Quantity
+  });
+});
+
+app.MapGet("/api/fm", () => {
     return FacilitiesMinerals.Select(fm => {
     List<Mineral> m = minerals.Where(m => m.Id == fm.MineralsId).ToList();
     List<MiningFacilities> Mining = miningFacilities.Where(m => m.Id == fm.MiningFacilityId).ToList();
@@ -391,7 +400,7 @@ app.MapGet("/api/facilityminerals/minerals/{id}", (int id) => {
         Quantity = fm.Quantity 
     };
 });
-app.MapGet("/api/miningfacilities/{id}", (int id) => {
+app.MapGet("/api/facilities/{id}", (int id) => {
     MiningFacilities facility = miningFacilities.FirstOrDefault(f => f.Id == id);
     return new MiningFacilityDTO
     {
