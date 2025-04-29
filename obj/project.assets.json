@@ -460,26 +460,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Nicholas\\.nuget\\packages\\": {}
+    "C:\\Users\\grego\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Nicholas\\workspace\\csharp\\exomine-csharp\\ExomineAPI.csproj",
+      "projectUniqueName": "C:\\Users\\grego\\workspace\\csharp\\ExomineAPI\\ExomineAPI.csproj",
       "projectName": "ExomineAPI",
-      "projectPath": "C:\\Users\\Nicholas\\workspace\\csharp\\exomine-csharp\\ExomineAPI.csproj",
-      "packagesPath": "C:\\Users\\Nicholas\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Nicholas\\workspace\\csharp\\exomine-csharp\\obj\\",
+      "projectPath": "C:\\Users\\grego\\workspace\\csharp\\ExomineAPI\\ExomineAPI.csproj",
+      "packagesPath": "C:\\Users\\grego\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\grego\\workspace\\csharp\\ExomineAPI\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Nicholas\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Users\\grego\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -492,13 +490,7 @@
         "warnAsError": [
           "NU1605"
         ]
-      },
-      "restoreAuditProperties": {
-        "enableAudit": "true",
-        "auditLevel": "low",
-        "auditMode": "direct"
-      },
-      "SdkAnalysisLevel": "9.0.200"
+      }
     },
     "frameworks": {
       "net8.0": {
@@ -532,7 +524,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

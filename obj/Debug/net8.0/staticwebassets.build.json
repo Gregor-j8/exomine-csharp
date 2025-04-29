@@ -1,12 +1,11 @@
 {
   "Version": 1,
-  "Hash": "KZXDDuEwTuZR8T2KxbvuGeA1xiAP2IWostCVTN/7BYE=",
+  "Hash": "UkFHycrLXTrvPSGpJgj+dhUKnHJUCMcK4BN5S4b1RTk=",
   "Source": "ExomineAPI",
   "BasePath": "_content/ExomineAPI",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
   "DiscoveryPatterns": [],
-  "Assets": [],
-  "Endpoints": []
+  "Assets": []
 }
