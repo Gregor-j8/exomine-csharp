@@ -402,20 +402,23 @@ app.MapGet("/api/fm", () => {
 });
 
 app.MapGet("/api/facilityminerals/minerals/{id}", (int id) => {
-    FacilityMineral fm = FacilitiesMinerals.FirstOrDefault(f => f.Id == id);
-    List<Mineral> m = minerals.Where(m => m.Id == fm.MineralsId).ToList();
-
-    return new FacilityMineralDTO {
-        Id = fm.Id, 
-        MiningFacilityId = fm.MiningFacilityId,
-        MineralId = fm.MineralsId,
-        Minerals = m.Select(m => new MineralDTO {
-            Id = m.Id,
-            Name = m.Name,
-        }).ToList(),
-        Quantity = fm.Quantity 
-    };
+    List<FacilityMineral> fm = FacilitiesMinerals.Where(f => f.MiningFacilityId == id).ToList();
+    List<FacilityMineralDTO> result = fm.Select(fm => {
+    List<Mineral> lm = minerals.Where(m => m.Id == fm.MineralsId).ToList();
+      return new FacilityMineralDTO {
+          Id = fm.Id,
+          MiningFacilityId = fm.MiningFacilityId,
+          MineralId = fm.MineralsId,
+          Minerals = lm.Select(m => new MineralDTO {
+              Id = m.Id,
+              Name = m.Name
+          }).ToList(),
+          Quantity = fm.Quantity
+        };
+    }).ToList();
+    return result;
 });
+
 app.MapGet("/api/facilities/{id}", (int id) => {
     MiningFacilities facility = miningFacilities.FirstOrDefault(f => f.Id == id);
     return new MiningFacilityDTO
