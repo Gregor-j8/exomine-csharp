@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ExomineAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c6f44c77c4a6f9be6cf9d32f73bb4c87fb4000a0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c9a79877ca081c3ad603501c7562a3a56c9bfdfb")]
 [assembly: System.Reflection.AssemblyProductAttribute("ExomineAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ExomineAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

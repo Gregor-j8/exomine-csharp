@@ -57,47 +57,58 @@ List<Governor> governors = new List<Governor>() {
 List<Colony> colonies = new List<Colony>() {
     new Colony() {
         Id = 1,
-        Name = "Nova Prime"
+        Name = "Nova Prime",
+        Balance = 1000
     },
     new Colony() {
-      Id = 2,
-      Name = "Kepler Outpost"
+        Id = 2,
+        Name = "Kepler Outpost",
+        Balance = 1200
     },
     new Colony() {
-       Id = 3,
-      Name = "Titan Haven"
+        Id = 3,
+        Name = "Titan Haven",
+        Balance = 1500
     },
     new Colony() {
-      Id = 4,
-      Name = "Andromeda Station"
+        Id = 4,
+        Name = "Andromeda Station",
+        Balance = 800
     },
     new Colony() {
-      Id = 5,
-      Name = "Orion's Reach"
+        Id = 5,
+        Name = "Orion's Reach",
+        Balance = 1100
     }
 };
+
 
 
 List<Mineral> minerals = new List<Mineral>(){
     new Mineral() {
         Id = 1,
-        Name = "Unobtanium"
+        Name = "Unobtanium",
+        Price = 150
     },
     new Mineral() {
         Id = 2,
-        Name = "Voidium"
+        Name = "Voidium",
+        Price = 250
     },
     new Mineral() {
         Id = 3,
-        Name = "Nebulite"
+        Name = "Nebulite",
+        Price = 350
     },
     new Mineral() {
         Id = 4,
-        Name = "Quantium Shardium"
+        Name = "Quantium Shardium",
+        Price = 450
     },
     new Mineral() {
         Id = 5,
-        Name = "Darkstar Ore"
+        Name = "Darkstar Ore",
+        Price = 550
     }
 };
 
