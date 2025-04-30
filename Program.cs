@@ -307,7 +307,8 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policy =>
     {
         policy.WithOrigins(
-            "http://localhost:3000" 
+            "http://localhost:3000",
+            "http://localhost:5173"
         )
         .AllowAnyHeader()
         .AllowAnyMethod();
@@ -355,7 +356,7 @@ app.MapGet("api/minerals", () => {
     });
 });
 
-app.MapGet("/api/miningfacilities", () => {
+app.MapGet("/api/facilities", () => {
     return miningFacilities.Select(f => new MiningFacilityDTO
     {
         Id = f.Id,
@@ -364,7 +365,31 @@ app.MapGet("/api/miningfacilities", () => {
     });
 });
 
-app.MapGet("/api/fm/", () => {
+app.MapGet("/api/colonyMinerals", () => {
+  return Colonyminerals.Select(cm => new ColonyMineralDTO{
+    Id = cm.Id,
+    ColonyId = cm.ColonyId,
+    MineralId = cm.Id,
+    Quantity = cm.Quantity
+  });
+});
+app.MapGet("/api/colonyMinerals/{id}", (int id) => {
+  List<ColonyMineral> cm = Colonyminerals.Where(cm => cm.ColonyId == id).ToList();
+  return cm.Select(cm => new ColonyMineralDTO{
+    Id = cm.Id,
+    ColonyId = cm.ColonyId,
+    MineralId = cm.Id,
+     Minerals = new List<MineralDTO> {
+      minerals.Where(m => m.Id == cm.MineralId).Select(m => new MineralDTO {
+              Id = m.Id,
+              Name = m.Name
+          }).FirstOrDefault()
+        },
+    Quantity = cm.Quantity
+  });
+});
+
+app.MapGet("/api/fm", () => {
     return FacilitiesMinerals.Select(fm => {
     List<Mineral> m = minerals.Where(m => m.Id == fm.MineralsId).ToList();
     List<MiningFacilities> Mining = miningFacilities.Where(m => m.Id == fm.MiningFacilityId).ToList();
@@ -388,21 +413,24 @@ app.MapGet("/api/fm/", () => {
 });
 
 app.MapGet("/api/facilityminerals/minerals/{id}", (int id) => {
-    FacilityMineral fm = FacilitiesMinerals.FirstOrDefault(f => f.Id == id);
-    List<Mineral> m = minerals.Where(m => m.Id == fm.MineralsId).ToList();
-
-    return new FacilityMineralDTO {
-        Id = fm.Id, 
-        MiningFacilityId = fm.MiningFacilityId,
-        MineralId = fm.MineralsId,
-        Minerals = m.Select(m => new MineralDTO {
-            Id = m.Id,
-            Name = m.Name,
-        }).ToList(),
-        Quantity = fm.Quantity 
-    };
+    List<FacilityMineral> fm = FacilitiesMinerals.Where(f => f.MiningFacilityId == id).ToList();
+    List<FacilityMineralDTO> result = fm.Select(fm => {
+    List<Mineral> lm = minerals.Where(m => m.Id == fm.MineralsId).ToList();
+      return new FacilityMineralDTO {
+          Id = fm.Id,
+          MiningFacilityId = fm.MiningFacilityId,
+          MineralId = fm.MineralsId,
+          Minerals = lm.Select(m => new MineralDTO {
+              Id = m.Id,
+              Name = m.Name
+          }).ToList(),
+          Quantity = fm.Quantity
+        };
+    }).ToList();
+    return result;
 });
-app.MapGet("/api/miningfacilities/{id}", (int id) => {
+
+app.MapGet("/api/facilities/{id}", (int id) => {
     MiningFacilities facility = miningFacilities.FirstOrDefault(f => f.Id == id);
     return new MiningFacilityDTO
     {
