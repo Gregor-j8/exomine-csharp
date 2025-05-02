@@ -245,37 +245,43 @@ List<FacilityMineral> FacilitiesMinerals = new List<FacilityMineral> {
       MiningFacilityId = 1,
       MineralsId = 1,
       Quantity = 98,
-      Id = 1
+      Id = 1,
+      ProductionRate = 3
     },
      new FacilityMineral {
       Id = 2,
       MiningFacilityId = 2,
       MineralsId = 2,
-      Quantity = 107
+      Quantity = 107,
+      ProductionRate = 2
     },
      new FacilityMineral {
       MiningFacilityId = 3,
       MineralsId = 3,
       Quantity = 148,
-      Id = 3
+      Id = 3,
+      ProductionRate = 5
     },
      new FacilityMineral {
       Id = 4,
       MiningFacilityId = 4,
       MineralsId = 4,
-      Quantity = 62
+      Quantity = 62,
+      ProductionRate = 4
     },
      new FacilityMineral {
       MiningFacilityId = 5,
       MineralsId = 5,
       Quantity = 593,
-      Id = 5
+      Id = 5,
+      ProductionRate = 2
     },
      new FacilityMineral {
       Id = 6,
       MiningFacilityId = 4,
       MineralsId = 1,
-      Quantity = 99
+      Quantity = 99,
+      ProductionRate = 3
     },
      new FacilityMineral {
       MiningFacilityId = 3,
@@ -287,19 +293,22 @@ List<FacilityMineral> FacilitiesMinerals = new List<FacilityMineral> {
       MiningFacilityId = 5,
       MineralsId = 3,
       Quantity = 159,
-      Id = 8
+      Id = 8,
+      ProductionRate = 5
     },
      new FacilityMineral {
       Id = 9,
       MiningFacilityId = 2,
       MineralsId = 4,
-      Quantity = 62
+      Quantity = 62,
+      ProductionRate = 1
     },
      new FacilityMineral {
       MiningFacilityId = 1,
       MineralsId = 5,
       Quantity = 591,
-      Id = 10
+      Id = 10,
+      ProductionRate = 8
     }
 };
 
@@ -316,7 +325,7 @@ builder.Services.AddCors(options =>
         policy.WithOrigins(
             "http://localhost:3000",
             "http://localhost:5173",
-            "http://localhost:5248"
+            "http://localhost:5248" 
         )
         .AllowAnyHeader()
         .AllowAnyMethod();
@@ -453,7 +462,8 @@ app.MapGet("/api/fm", () => {
             Name = m.Name,
             Price = m.Price
         }).ToList(),
-        Quantity = fm.Quantity 
+        Quantity = fm.Quantity,
+        ProductionRate = fm.ProductionRate
     };
     });
 });
@@ -477,6 +487,7 @@ app.MapGet("/api/facilityminerals/minerals/{id}", (int id) => {
     return result;
 });
 
+    
 app.MapGet("/api/facilities/{id}", (int id) => {
     MiningFacilities facility = miningFacilities.FirstOrDefault(f => f.Id == id);
     return new MiningFacilityDTO
@@ -500,6 +511,46 @@ app.MapGet("/api/facilityMinerals/{id}", (int id) => {
   };
 });
 
+app.MapGet("/api/facilityminerals/all/{facilityId}", (int facilityId) => {
+    var result = FacilitiesMinerals
+        .Where(fm => fm.MiningFacilityId == facilityId)
+        .Select(fm => new FacilityMineralDTO {
+            Id = fm.Id,
+            MiningFacilityId = fm.MiningFacilityId,
+            MineralId = fm.MineralsId,
+            Quantity = fm.Quantity,
+            ProductionRate = fm.ProductionRate,
+            Minerals = minerals
+                .Where(m => m.Id == fm.MineralsId)
+                .Select(m => new MineralDTO {
+                    Id = m.Id,
+                    Name = m.Name
+                }).ToList()
+        }).ToList();
+
+    return Results.Ok(result);
+});
+
+
+app.MapGet("/api/colonyMinerals/{id}", (int id) => {
+    var colonyMinerals = Colonyminerals
+        .Where(cm => cm.ColonyId == id)
+        .Select(cm => new ColonyMineralDTO {
+            Id = cm.Id,
+            ColonyId = cm.ColonyId,
+            MineralId = cm.MineralId,
+            Quantity = cm.Quantity,
+            Minerals = minerals
+                .Where(m => m.Id == cm.MineralId)
+                .Select(m => new MineralDTO {
+                    Id = m.Id,
+                    Name = m.Name
+                }).ToList()
+        }).ToList();
+
+    return Results.Ok(colonyMinerals);
+});
+
 app.MapPost("/api/colonyMinerals", (ColonyMineral colonyMineral) => {
 
   if(colonyMineral == null){
@@ -516,6 +567,14 @@ app.MapPost("/api/colonyMinerals", (ColonyMineral colonyMineral) => {
     Quantity = colonyMineral.Quantity,
   });
 });
+
+app.MapPost("/api/simulate-time", () => {
+  foreach(var fm in FacilitiesMinerals){
+    fm.Quantity += fm.ProductionRate;
+  }
+  return Results.Ok();
+});
+
 
 app.MapPut("/api/facilityMinerals/{id}", (int id, FacilityMineralDTO updatedFM) =>
 {

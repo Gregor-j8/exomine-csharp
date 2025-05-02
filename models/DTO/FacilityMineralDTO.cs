@@ -6,4 +6,5 @@ public class FacilityMineralDTO {
         public List<MineralDTO>? Minerals {get; set;}
         public int MineralId {get; set;}
         public int Quantity {get; set;}
+        public int ProductionRate {get; set;}
 }
