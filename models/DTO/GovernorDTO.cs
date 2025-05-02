@@ -5,4 +5,5 @@ public class GovernorDTO
     public string Name {get; set;}
     public bool IsActive {get; set;}
     public int ColonyId {get; set;}
+    public ColonyDTO ? colonyDTOs{get; set;}
 }

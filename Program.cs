@@ -57,77 +57,95 @@ List<Governor> governors = new List<Governor>() {
 List<Colony> colonies = new List<Colony>() {
     new Colony() {
         Id = 1,
-        Name = "Nova Prime"
+        Name = "Nova Prime",
+        Balance = 1000
     },
     new Colony() {
-      Id = 2,
-      Name = "Kepler Outpost"
+        Id = 2,
+        Name = "Kepler Outpost",
+        Balance = 1200
     },
     new Colony() {
-       Id = 3,
-      Name = "Titan Haven"
+        Id = 3,
+        Name = "Titan Haven",
+        Balance = 1500
     },
     new Colony() {
-      Id = 4,
-      Name = "Andromeda Station"
+        Id = 4,
+        Name = "Andromeda Station",
+        Balance = 800
     },
     new Colony() {
-      Id = 5,
-      Name = "Orion's Reach"
+        Id = 5,
+        Name = "Orion's Reach",
+        Balance = 1100
     }
 };
 
 
-List<Mineral> minerals = new List<Mineral>(){
+
+List<Mineral> minerals = new List<Mineral>() {
     new Mineral() {
         Id = 1,
-        Name = "Unobtanium"
+        Name = "Unobtanium",
+        Price = 15
     },
     new Mineral() {
         Id = 2,
-        Name = "Voidium"
+        Name = "Voidium",
+        Price = 25
     },
     new Mineral() {
         Id = 3,
-        Name = "Nebulite"
+        Name = "Nebulite",
+        Price = 35
     },
     new Mineral() {
         Id = 4,
-        Name = "Quantium Shardium"
+        Name = "Quantium Shardium",
+        Price = 45
     },
     new Mineral() {
         Id = 5,
-        Name = "Darkstar Ore"
+        Name = "Darkstar Ore",
+        Price = 55
     }
 };
 
-List<MiningFacilities> miningFacilities = new List<MiningFacilities>(){
+
+List<MiningFacilities> miningFacilities = new List<MiningFacilities>() {
     new MiningFacilities() {
-      Id = 1,
-      Name = "Celestial Excavation Hub",
-      IsActive = true
+        Id = 1,
+        Name = "Celestial Excavation Hub",
+        IsActive = true,
+        Balance = 2000
     },
     new MiningFacilities() {
-      Id = 2,
-      Name = "Nebula Core Refinery",
-      IsActive = false
+        Id = 2,
+        Name = "Nebula Core Refinery",
+        IsActive = false,
+        Balance = 500
     },
     new MiningFacilities() {
-      Id = 3,
-      Name = "Titan Deep Drills",
-      IsActive = true
+        Id = 3,
+        Name = "Titan Deep Drills",
+        IsActive = true,
+        Balance = 1700
     },
     new MiningFacilities() {
-      Id = 4,
-      Name = "Eclipse Ore Extractors",
-      IsActive = false
+        Id = 4,
+        Name = "Eclipse Ore Extractors",
+        IsActive = false,
+        Balance = 400
     },
     new MiningFacilities() {
-      Id = 5,
-      Name = "Quantum Harvest Station",
-      IsActive = true
+        Id = 5,
+        Name = "Quantum Harvest Station",
+        IsActive = true,
+        Balance = 2200
     }
 };
+
 
 List<ColonyMineral> Colonyminerals = new List<ColonyMineral>(){
      new ColonyMineral {
@@ -332,26 +350,51 @@ app.MapGet("/api/colonies", () =>
     return colonies.Select(c => new ColonyDTO 
     {
        Id = c.Id,
-       Name = c.Name 
+       Name = c.Name,
+       Balance = c.Balance  
     }); 
 }); 
 
 app.MapGet("/api/governors", () => {
+
     return governors.Select(g => new GovernorDTO
     {
         Id = g.Id,
         Name = g.Name,
         IsActive = g.IsActive,
         ColonyId = g.ColonyId
+
     });
 });
+
+app.MapGet("/api/governors/{id}", (int id) => {
+  Governor g = governors.FirstOrDefault(g => g.Id == id);
+  Colony c = colonies.FirstOrDefault(c => c.Id == g.ColonyId);
+
+    return new GovernorDTO
+    {
+        Id = g.Id,
+        Name = g.Name,
+        IsActive = g.IsActive,
+        ColonyId = g.ColonyId,
+        colonyDTOs = new ColonyDTO
+        { 
+          Id = c.Id,
+          Name = c.Name,
+          Balance = c.Balance
+      
+        }
+    };
+  });
+
 
 // need join  table
 app.MapGet("api/minerals", () => {
     return minerals.Select(m => new MineralDTO
     {
         Id = m.Id,
-        Name = m.Name
+        Name = m.Name,
+        Price = m.Price
     });
 });
 
@@ -360,15 +403,41 @@ app.MapGet("/api/facilities", () => {
     {
         Id = f.Id,
         Name = f.Name,
-        IsActive = f.IsActive
+        IsActive = f.IsActive,
+        Balance = f.Balance
     });
+});
+
+app.MapGet("/api/colonies/{id}", (int id) => {
+  List<Colony> c = colonies.Where(c => c.Id == id).ToList();
+  return c.Select(c => new ColonyDTO{
+    Id = c.Id,
+    Name = c.Name,
+    Balance = c.Balance  
+  });
 });
 
 app.MapGet("/api/colonyMinerals", () => {
   return Colonyminerals.Select(cm => new ColonyMineralDTO{
     Id = cm.Id,
     ColonyId = cm.ColonyId,
-    MineralId = cm.Id,
+    MineralId = cm.MineralId,
+    Quantity = cm.Quantity
+  });
+});
+app.MapGet("/api/colonyMinerals/{id}", (int id) => {
+  List<ColonyMineral> cm = Colonyminerals.Where(cm => cm.ColonyId == id).ToList();
+  return cm.Select(cm => new ColonyMineralDTO{
+    Id = cm.Id,
+    ColonyId = cm.ColonyId,
+    MineralId = cm.MineralId,
+     Minerals = new List<MineralDTO> {
+      minerals.Where(m => m.Id == cm.MineralId).Select(m => new MineralDTO {
+              Id = m.Id,
+              Name = m.Name,
+              Price = m.Price,
+          }).FirstOrDefault()
+        },
     Quantity = cm.Quantity
   });
 });
@@ -384,12 +453,14 @@ app.MapGet("/api/fm", () => {
         Facility = Mining.Select(f => new MiningFacilityDTO {
             Id = f.Id,
             Name = f.Name,
-            IsActive = f.IsActive
+            IsActive = f.IsActive,
+            Balance = f.Balance,
         }).ToList(),
         MineralId = fm.MineralsId,
         Minerals = m.Select(m => new MineralDTO {
             Id = m.Id,
             Name = m.Name,
+            Price = m.Price
         }).ToList(),
         Quantity = fm.Quantity,
         ProductionRate = fm.ProductionRate
@@ -398,27 +469,33 @@ app.MapGet("/api/fm", () => {
 });
 
 app.MapGet("/api/facilityminerals/minerals/{id}", (int id) => {
-    FacilityMineral fm = FacilitiesMinerals.FirstOrDefault(f => f.Id == id);
-    List<Mineral> m = minerals.Where(m => m.Id == fm.MineralsId).ToList();
-
-    return new FacilityMineralDTO {
-        Id = fm.Id, 
-        MiningFacilityId = fm.MiningFacilityId,
-        MineralId = fm.MineralsId,
-        Minerals = m.Select(m => new MineralDTO {
-            Id = m.Id,
-            Name = m.Name,
-        }).ToList(),
-        Quantity = fm.Quantity,
-    };
+    List<FacilityMineral> fm = FacilitiesMinerals.Where(f => f.MiningFacilityId == id).ToList();
+    List<FacilityMineralDTO> result = fm.Select(fm => {
+    List<Mineral> lm = minerals.Where(m => m.Id == fm.MineralsId).ToList();
+      return new FacilityMineralDTO {
+          Id = fm.Id,
+          MiningFacilityId = fm.MiningFacilityId,
+          MineralId = fm.MineralsId,
+          Minerals = lm.Select(m => new MineralDTO {
+              Id = m.Id,
+              Name = m.Name,
+              Price = m.Price
+          }).ToList(),
+          Quantity = fm.Quantity
+        };
+    }).ToList();
+    return result;
 });
+
+    
 app.MapGet("/api/facilities/{id}", (int id) => {
     MiningFacilities facility = miningFacilities.FirstOrDefault(f => f.Id == id);
     return new MiningFacilityDTO
     {
         Id = facility.Id,
         Name = facility.Name,
-        IsActive = facility.IsActive
+        IsActive = facility.IsActive, 
+        Balance = facility.Balance
     };
 });
 
@@ -522,8 +599,42 @@ app.MapPut("api/colonyMinerals/{id}", (int id, ColonyMineralDTO CMDTO) => {
   colonyMineral.MineralId = CMDTO.MineralId;
   colonyMineral.Quantity = CMDTO.Quantity;
 
-  return Results.NoContent();
+  return Results.Ok();
 
 });
+app.MapPost("/api/purchase", (PurchasedMineral pm) =>
+{
+    var colony = colonies.FirstOrDefault(c => c.Id == pm.colonyId);
+    var facility = miningFacilities.FirstOrDefault(f => f.Id == pm.facilityId);
+    var facilityMineral = FacilitiesMinerals.FirstOrDefault(fm => fm.MiningFacilityId == pm.facilityId && fm.MineralsId == pm.mineralId);
+    var colonyMineral = Colonyminerals.FirstOrDefault(cm => cm.ColonyId == pm.colonyId && cm.MineralId == pm.mineralId);
+    var mineral = minerals.FirstOrDefault(m => m.Id == pm.mineralId);
+    var totalCost = mineral.Price * pm.quantity;
+    Console.WriteLine(totalCost);
+
+    colony.Balance -= totalCost;
+    facility.Balance += totalCost;
+    facilityMineral.Quantity -= pm.quantity;
+
+    if (colonyMineral != null)
+    {
+        colonyMineral.Quantity += pm.quantity;
+    }
+    else
+    {
+        Colonyminerals.Add(new ColonyMineral
+        {
+            Id = Colonyminerals.Max(cm => cm.Id) + 1,
+            MineralId = pm.mineralId,
+            ColonyId = pm.colonyId,
+            Quantity = pm.quantity
+        });
+    }
+
+    return Results.Ok("Purchase successful.");
+});
+
+
+
 
 app.Run();
